@@ -32,6 +32,70 @@
       --transition-standard: all 0.25s ease-in-out;
     }
 
+    /* Toggle Switch Styles */
+    .language-toggle {
+      display: flex;
+      align-items: center;
+    }
+
+    .toggle {
+      position: relative;
+      display: block;
+      width: 80px; /* Smaller toggle for integration */
+      height: 30px; /* Smaller toggle for integration */
+      outline: 0;
+      text-decoration: none;
+      border-radius: 30px; /* Rounded corners */
+      border: 1px solid var(--gray-600); /* Grey border */
+      background-color: var(--gray-700); /* Dark background */
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+    }
+
+    .toggle:active {
+      background-color: var(--gray-600);
+    }
+
+    .toggle:after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      bottom: 2px;
+      left: 2px;
+      width: calc(50% - 2px);
+      border-radius: 30px; /* Rounded corners for inner part */
+      background-color: var(--gray-300); /* Light grey inner part */
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      color: var(--text-color);
+    }
+
+    .toggle--on {
+      background-color: var(--primary-color); /* Primary color when on */
+      border-color: var(--primary-light); /* Lighter border when on */
+    }
+
+    .toggle--on:active {
+      background-color: var(--primary-light);
+    }
+
+    .toggle--on:after {
+      content: 'ES';
+      transform: translateX(100%);
+      background-color: var(--accent-color); /* Accent color when on and active */
+      color: var(--text-color);
+    }
+
+    .toggle--off:after {
+      content: 'EN';
+      background-color: var(--secondary-color); /* Secondary color when off */
+      color: var(--text-color);
+    }
+
+    /* Existing Styles - No changes here, just ensuring they are present */
     * {
       margin: 0;
       padding: 0;
@@ -46,7 +110,7 @@
       overflow-x: hidden;
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1, h2, h3, h4, h5, h5 {
       font-family: 'Inter', sans-serif;
       font-weight: 700;
       line-height: 1.3;
@@ -812,6 +876,18 @@
 
       .navbar-menu.active {
         display: flex; /* Show menu when active class is applied */
+        flex-direction: column; /* Ensure vertical layout in mobile menu */
+      }
+
+      .navbar-menu.active li, .navbar-menu.active .language-toggle {
+        width: 100%; /* Make menu items full width in mobile view */
+        display: block; /* Ensure list items are block to take full width */
+        text-align: left; /* Align text to the left */
+      }
+
+      .navbar-menu.active .language-toggle {
+        margin-left: 1.5rem; /* Indent toggle to align with menu items text */
+        margin-bottom: 1rem; /* Add some space below toggle */
       }
 
 
@@ -832,6 +908,8 @@
 
       .dropdown-content {
         position: relative; /* Adjust dropdown position for mobile */
+            background-color: white; /* ADD THIS LINE */
+
         box-shadow: none;
         width: 100%;
       }
@@ -940,52 +1018,50 @@
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="navbar-container">
-      <a href="#" class="navbar-brand">Sonoran Agrivoltaics</a>
-      <button type="button" class="mobile-toggle">
-        <i class="fas fa-bars"></i>
-      </button>
-      <ul class="navbar-menu">
-        <li><a href="https://sbgeorgi.github.io/ISA/index.html" class="navbar-link" target="_blank">International School of Agrivoltaics (ISA)</a></li>
-        <li>
-          <a href="#" class="navbar-link">Explore Sections</a>
-          <ul class="dropdown-content">
-            <li><a href="#map-section">Map</a></li>
-            <li><a href="#projects-section">Projects</a></li>
-            <li><a href="#municipalities-section">Project Status</a></li>
-          </ul>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <a href="#" class="navbar-brand" data-en="Sonoran Agrivoltaics" data-es="Agrivoltaicos Sonorenses">Sonoran Agrivoltaics</a>
+        <button type="button" class="mobile-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <!-- Language Toggle Switch OUTSIDE of navbar-menu -->
+        
+        <ul class="navbar-menu">
+          <li><a href="https://sbgeorgi.github.io/ISA/index.html" class="navbar-link" target="_blank" data-en="International School of Agrivoltaics (ISA)" data-es="Escuela Internacional de Agrivoltaicos (ISA)">International School of Agrivoltaics (ISA)</a></li>        <li class="dropdown">          <a href="#" class="navbar-link" data-en="Explore Sections" data-es="Explorar Secciones">Explore Sections</a>          <ul class="dropdown-content">            <li><a href="#map-section" data-en="Map" data-es="Mapa">Map</a></li>            <li><a href="#projects-section" data-en="Projects" data-es="Proyectos">Projects</a></li>            <li><a href="#municipalities-section" data-en="Project Status" data-es="Estado de Proyectos">Project Status</a></li>          </ul>        </li>
+        </ul>
+        <li class="language-toggle">
+          <button class="toggle toggle--off" id="languageToggle"></button>
         </li>
-      </ul>
-    </div>
-  </nav>
+      </div>
+    </nav>
 
 
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <h1>Sonoran Agrivoltaic Projects</h1>
-      <p class="hero-subtitle">Integrating solar energy and sustainable agriculture for a bright future in Sonora, Mexico</p>
-      <a href="#projects-section" class="hero-cta">Explore Projects <i class="fas fa-arrow-right"></i></a>
+      <h1 data-en="Sonoran Agrivoltaic Projects" data-es="Proyectos Agrivoltaicos Sonorenses">Sonoran Agrivoltaic Projects</h1>
+      <p class="hero-subtitle" data-en="Integrating solar energy and sustainable agriculture for a bright future in Sonora, Mexico"
+         data-es="Integrando energía solar y agricultura sostenible para un futuro brillante en Sonora, México">Integrating solar energy and sustainable agriculture for a bright future in Sonora, Mexico</p>
+      <a href="#projects-section" class="hero-cta" data-en="Explore Projects" data-es="Explorar Proyectos">Explore Projects <i class="fas fa-arrow-right"></i></a>
     </div>
     <div class="hero-stats">
       <div class="stats-wrapper">
         <div class="hero-stat">
           <div class="hero-stat-number">15</div>
-          <div class="hero-stat-label">Projects in Development</div>
+          <div class="hero-stat-label" data-en="Projects in Development" data-es="Proyectos en Desarrollo">Projects in Development</div>
         </div>
         <div class="hero-stat">
           <div class="hero-stat-number">3</div>
-          <div class="hero-stat-label">Main Zones</div>
+          <div class="hero-stat-label" data-en="Main Zones" data-es="Zonas Principales">Main Zones</div>
         </div>
         <div class="hero-stat">
           <div class="hero-stat-number">17</div>
-          <div class="hero-stat-label">Municipalities Benefited</div>
+          <div class="hero-stat-label" data-en="Municipalities Benefited" data-es="Municipios Beneficiados">Municipalities Benefited</div>
         </div>
         <div class="hero-stat">
           <div class="hero-stat-number">500+</div>
-          <div class="hero-stat-label">Hectares Utilized</div>
+          <div class="hero-stat-label" data-en="Hectares Utilized" data-es="Hectáreas Utilizadas">Hectares Utilized</div>
         </div>
       </div>
     </div>
@@ -994,7 +1070,7 @@
   <!-- Main Content -->
   <div class="container">
     <!-- Map Section -->
-    <h2 class="section-title" id="map-section"></h2>
+    <h2 class="section-title" id="map-section" data-en="Project Locations Map" data-es="Mapa de Ubicaciones de Proyectos">Project Locations Map</h2>
     <div class="map-section">
       <div class="map-container">
         <div id="map"></div>
@@ -1002,18 +1078,20 @@
     </div>
 
     <!-- Featured Projects -->
-    <h2 class="section-title" id="projects-section">Solar Installations in Sonora</h2>
-    <p class="section-subtitle">Highlighting key solar energy projects recently completed in Sonora's High Sierra region.</p>
+    <h2 class="section-title" id="projects-section" data-en="Solar Installations in Sonora" data-es="Instalaciones Solares en Sonora">Solar Installations in Sonora</h2>
+    <p class="section-subtitle" data-en="Highlighting key solar energy projects recently completed in Sonora's High Sierra region."
+       data-es="Destacando proyectos clave de energía solar recientemente completados en la región de la Sierra Alta de Sonora.">Highlighting key solar energy projects recently completed in Sonora's High Sierra region.</p>
     <div class="projects-grid">
       <div class="project-card">
         <div class="project-image-container">
           <img src="static/Bacadehuachi.jpg" alt="Solar Project in Bacadehuachi" class="project-image">
         </div>
         <div class="project-details">
-          <h3 class="project-title">Bacadéhuachi Solar Plant</h3>
-          <p class="project-location"><i class="fas fa-map-marker-alt"></i>Bacadéhuachi, Sonora</p>
-          <p class="project-description">Solar plant in Bacadéhuachi, Sonora, powering homes in a lithium-rich municipality. This 500 kW plant ensures residents can reliably use air conditioning and other appliances.</p>
-          <a href="https://forbes.com.mx/bacadehuachi-el-pueblo-inundado-de-litio-sera-encendido-con-energia-solar/" class="project-cta" target="_blank">View Details <i class="fas fa-arrow-right"></i></a>
+          <h3 class="project-title" data-en="Bacadéhuachi Solar Plant" data-es="Planta Solar de Bacadéhuachi">Bacadéhuachi Solar Plant</h3>
+          <p class="project-location"><i class="fas fa-map-marker-alt"></i><span data-en="Bacadéhuachi, Sonora" data-es="Bacadéhuachi, Sonora">Bacadéhuachi, Sonora</span></p>
+          <p class="project-description" data-en="Solar plant in Bacadéhuachi, Sonora, powering homes in a lithium-rich municipality. This 500 kW plant ensures residents can reliably use air conditioning and other appliances."
+             data-es="Planta solar en Bacadéhuachi, Sonora, que suministra energía a hogares en un municipio rico en litio. Esta planta de 500 kW asegura que los residentes puedan usar aire acondicionado y otros electrodomésticos de manera confiable.">Solar plant in Bacadéhuachi, Sonora, powering homes in a lithium-rich municipality. This 500 kW plant ensures residents can reliably use air conditioning and other appliances.</p>
+          <a href="https://forbes.com.mx/bacadehuachi-el-pueblo-inundado-de-litio-sera-encendido-con-energia-solar/" class="project-cta" target="_blank" data-en="View Details" data-es="Ver Detalles">View Details <i class="fas fa-arrow-right"></i></a>
         </div>
       </div>
       <div class="project-card">
@@ -1021,10 +1099,11 @@
           <img src="static/baserac.jpg" alt="Solar Project in Bacerac" class="project-image">
         </div>
         <div class="project-details">
-          <h3 class="project-title">Bacerac Solar Plant</h3>
-          <p class="project-location"><i class="fas fa-map-marker-alt"></i>Bacerac, Sonora</p>
-          <p class="project-description">Located in Bacerac, this 500 kW solar installation provides clean energy to the community, contributing to sustainable energy solutions in the High Sierra.</p>
-          <a href="https://forbes.com.mx/bacadehuachi-el-pueblo-inundado-de-litio-sera-encendido-con-energia-solar/" class="project-cta" target="_blank">View Details <i class="fas fa-arrow-right"></i></a>
+          <h3 class="project-title" data-en="Bacerac Solar Plant" data-es="Planta Solar de Bacerac">Bacerac Solar Plant</h3>
+          <p class="project-location"><i class="fas fa-map-marker-alt"></i><span data-en="Bacerac, Sonora" data-es="Bacerac, Sonora">Bacerac, Sonora</span></p>
+          <p class="project-description" data-en="Located in Bacerac, this 500 kW solar installation provides clean energy to the community, contributing to sustainable energy solutions in the High Sierra."
+             data-es="Ubicada en Bacerac, esta instalación solar de 500 kW proporciona energía limpia a la comunidad, contribuyendo a soluciones de energía sostenible en la Sierra Alta.">Located in Bacerac, this 500 kW solar installation provides clean energy to the community, contributing to sustainable energy solutions in the High Sierra.</p>
+          <a href="https://forbes.com.mx/bacadehuachi-el-pueblo-inundado-de-litio-sera-encendido-con-energia-solar/" class="project-cta" target="_blank" data-en="View Details" data-es="Ver Detalles">View Details <i class="fas fa-arrow-right"></i></a>
         </div>
       </div>
       <div class="project-card">
@@ -1032,10 +1111,11 @@
           <img src="static/bavispe.jpg" alt="Solar Project in Bavispe" class="project-image">
         </div>
         <div class="project-details">
-          <h3 class="project-title">Bavispe Solar Plant</h3>
-          <p class="project-location"><i class="fas fa-map-marker-alt"></i>Bavispe, Sonora</p>
-          <p class="project-description">The Bavispe solar project, with a 500 kW capacity, significantly reduces CO2 emissions and provides accessible clean energy for the community.</p>
-          <a href="https://emmi.mx/proyectos-destacados/sfv-bavispe-420kw" class="project-cta" target="_blank">View Details <i class="fas fa-arrow-right"></i></a>
+          <h3 class="project-title" data-en="Bavispe Solar Plant" data-es="Planta Solar de Bavispe">Bavispe Solar Plant</h3>
+          <p class="project-location"><i class="fas fa-map-marker-alt"></i><span data-en="Bavispe, Sonora" data-es="Bavispe, Sonora">Bavispe, Sonora</span></p>
+          <p class="project-description" data-en="The Bavispe solar project, with a 500 kW capacity, significantly reduces CO2 emissions and provides accessible clean energy for the community."
+             data-es="El proyecto solar de Bavispe, con una capacidad de 500 kW, reduce significativamente las emisiones de CO2 y proporciona energía limpia accesible para la comunidad.">The Bavispe solar project, with a 500 kW capacity, significantly reduces CO2 emissions and provides accessible clean energy for the community.</p>
+          <a href="https://emmi.mx/proyectos-destacados/sfv-bavispe-420kw" class="project-cta" target="_blank" data-en="View Details" data-es="Ver Detalles">View Details <i class="fas fa-arrow-right"></i></a>
         </div>
       </div>
     </div>
@@ -1047,16 +1127,22 @@
       <div class="featured-content">
         <img src="static/Huachinera.jpeg" alt="Huachinera Solar Plant" class="featured-image">
         <div class="featured-text">
-          <h2 class="featured-title">Huachinera Solar Project</h2>
-          <p>The Huachinera solar plant, boasting a capacity of 499 kW, stands as a flagship project within Sonora's renewable energy initiative. As part of the Ejido Solar program, this plant is pioneering a community-centric approach to solar energy development.</p>
+          <h2 class="featured-title" data-en="Huachinera Solar Project" data-es="Proyecto Solar de Huachinera">Huachinera Solar Project</h2>
+          <p data-en="The Huachinera solar plant, boasting a capacity of 499 kW, stands as a flagship project within Sonora's renewable energy initiative. As part of the Ejido Solar program, this plant is pioneering a community-centric approach to solar energy development."
+             data-es="La planta solar de Huachinera, con una capacidad de 499 kW, se destaca como un proyecto insignia dentro de la iniciativa de energía renovable de Sonora. Como parte del programa Ejido Solar, esta planta está siendo pionera en un enfoque centrado en la comunidad para el desarrollo de energía solar.">The Huachinera solar plant, boasting a capacity of 499 kW, stands as a flagship project within Sonora's renewable energy initiative. As part of the Ejido Solar program, this plant is pioneering a community-centric approach to solar energy development.</p>
           <ul>
-            <li><strong>Community-Owned Energy:</strong> Built on land provided by the Ejido Assembly, ensuring community ownership and governance.</li>
-            <li><strong>UK PACT Collaboration:</strong> Supported through the UK PACT program, highlighting international cooperation in climate action.</li>
-            <li><strong>First of 40 Plants:</strong>  Leads the way for 40 planned distributed solar systems across Sonora, aiming to benefit 122,000 people.</li>
-            <li><strong>Economic and Environmental Impact:</strong> Reduces electricity costs for residents and municipal services, while significantly decreasing greenhouse gas emissions.</li>
+            <li data-en="Community-Owned Energy: Built on land provided by the Ejido Assembly, ensuring community ownership and governance."
+                data-es="Energía de Propiedad Comunitaria: Construida en terrenos proporcionados por la Asamblea Ejidal, asegurando la propiedad y gobernanza comunitaria."><strong>Community-Owned Energy:</strong> Built on land provided by the Ejido Assembly, ensuring community ownership and governance.</li>
+            <li data-en="UK PACT Collaboration: Supported through the UK PACT program, highlighting international cooperation in climate action."
+                data-es="Colaboración UK PACT: Apoyada a través del programa UK PACT, destacando la cooperación internacional en la acción climática."><strong>UK PACT Collaboration:</strong> Supported through the UK PACT program, highlighting international cooperation in climate action.</li>
+            <li data-en="First of 40 Plants:  Leads the way for 40 planned distributed solar systems across Sonora, aiming to benefit 122,000 people."
+                data-es="Primera de 40 Plantas: Lidera el camino para 40 sistemas solares distribuidos planificados en Sonora, con el objetivo de beneficiar a 122,000 personas."><strong>First of 40 Plants:</strong>  Leads the way for 40 planned distributed solar systems across Sonora, aiming to benefit 122,000 people.</li>
+            <li data-en="Economic and Environmental Impact: Reduces electricity costs for residents and municipal services, while significantly decreasing greenhouse gas emissions."
+                data-es="Impacto Económico y Ambiental: Reduce los costos de electricidad para residentes y servicios municipales, al tiempo que disminuye significativamente las emisiones de gases de efecto invernadero."><strong>Economic and Environmental Impact:</strong> Reduces electricity costs for residents and municipal services, while significantly decreasing greenhouse gas emissions.</li>
           </ul>
-          <p>This project exemplifies a new paradigm for solar development in Mexico, focusing on community participation and fair distribution of benefits.</p>
-          <a href="https://www.pv-magazine-mexico.com/2023/08/08/ejido-solar-y-su-nueva-planta-de-generacion-distribuida-de-499-kw-en-huachinera-sonora/" class="project-cta" target="_blank">Learn More <i class="fas fa-arrow-right"></i></a>
+          <p data-en="This project exemplifies a new paradigm for solar development in Mexico, focusing on community participation and fair distribution of benefits."
+             data-es="Este proyecto ejemplifica un nuevo paradigma para el desarrollo solar en México, centrado en la participación comunitaria y la distribución justa de los beneficios.">This project exemplifies a new paradigm for solar development in Mexico, focusing on community participation and fair distribution of benefits.</p>
+          <a href="https://www.pv-magazine-mexico.com/2023/08/08/ejido-solar-y-su-nueva-planta-de-generacion-distribuida-de-499-kw-en-huachinera-sonora/" class="project-cta" target="_blank" data-en="Learn More" data-es="Aprender Más">Learn More <i class="fas fa-arrow-right"></i></a>
 
         </div>
       </div>
@@ -1066,120 +1152,121 @@
   <!-- Municipalities Table -->
   <section class="municipalities-section" id="municipalities-section">
     <div class="container">
-      <h2 class="section-title">Municipalities with Solar Installations</h2>
-      <p class="section-subtitle">List of municipalities in Sonora that now feature operational or planned solar photovoltaic plants.</p>
+      <h2 class="section-title" data-en="Municipalities with Solar Installations" data-es="Municipios con Instalaciones Solares">Municipalities with Solar Installations</h2>
+      <p class="section-subtitle" data-en="List of municipalities in Sonora that now feature operational or planned solar photovoltaic plants."
+         data-es="Lista de municipios en Sonora que ahora cuentan con plantas solares fotovoltaicas operativas o planificadas.">List of municipalities in Sonora that now feature operational or planned solar photovoltaic plants.</p>
       <div class="table-container">
         <table class="project-table">
           <thead>
             <tr>
-              <th>Number</th>
-              <th>Zone</th>
-              <th>Municipality</th>
-              <th>Development Status</th>
+              <th data-en="Number" data-es="Número">Number</th>
+              <th data-en="Zone" data-es="Zona">Zone</th>
+              <th data-en="Municipality" data-es="Municipio">Municipality</th>
+              <th data-en="Development Status" data-es="Estado de Desarrollo">Development Status</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>1</td>
-              <td><span class="badge badge-sierra">High Sierra</span></td>
-              <td>Bacadéhuachi</td>
-              <td>Operational</td>
+              <td><span class="badge badge-sierra" data-en="High Sierra" data-es="Sierra Alta">High Sierra</span></td>
+              <td data-en="Bacadéhuachi" data-es="Bacadéhuachi">Bacadéhuachi</td>
+              <td data-en="Operational" data-es="Operacional">Operational</td>
             </tr>
             <tr>
               <td>2</td>
-              <td><span class="badge badge-sierra">High Sierra</span></td>
-              <td>Huachinera</td>
-              <td>Operational</td>
+              <td><span class="badge badge-sierra" data-en="High Sierra" data-es="Sierra Alta">High Sierra</span></td>
+              <td data-en="Huachinera" data-es="Huachinera">Huachinera</td>
+              <td data-en="Operational" data-es="Operacional">Operational</td>
             </tr>
             <tr>
               <td>3</td>
-              <td><span class="badge badge-sierra">High Sierra</span></td>
-              <td>Bácerac</td>
-              <td>Operational</td>
+              <td><span class="badge badge-sierra" data-en="High Sierra" data-es="Sierra Alta">High Sierra</span></td>
+              <td data-en="Bácerac" data-es="Bácerac">Bácerac</td>
+              <td data-en="Operational" data-es="Operacional">Operational</td>
             </tr>
             <tr>
               <td>4</td>
-              <td><span class="badge badge-sierra">High Sierra</span></td>
-              <td>Bavispe</td>
-              <td>Operational</td>
+              <td><span class="badge badge-sierra" data-en="High Sierra" data-es="Sierra Alta">High Sierra</span></td>
+              <td data-en="Bavispe" data-es="Bavispe">Bavispe</td>
+              <td data-en="Operational" data-es="Operacional">Operational</td>
             </tr>
             <tr>
               <td>5</td>
-              <td><span class="badge badge-rio">Sonora River</span></td>
-              <td>Ures</td>
-              <td>Future Projects</td>
+              <td><span class="badge badge-rio" data-en="Sonora River" data-es="Río Sonora">Sonora River</span></td>
+              <td data-en="Ures" data-es="Ures">Ures</td>
+              <td data-en="Future Projects" data-es="Proyectos Futuros">Future Projects</td>
             </tr>
             <tr>
               <td>6</td>
-              <td><span class="badge badge-rio">Sonora River</span></td>
-              <td>Baviacora</td>
-              <td>Planned Initiatives</td>
+              <td><span class="badge badge-rio" data-en="Sonora River" data-es="Río Sonora">Sonora River</span></td>
+              <td data-en="Baviacora" data-es="Baviacora">Baviacora</td>
+              <td data-en="Planned Initiatives" data-es="Iniciativas Planificadas">Planned Initiatives</td>
             </tr>
             <tr>
               <td>7</td>
-              <td><span class="badge badge-rio">Sonora River</span></td>
-              <td>Aconchi</td>
-              <td>Planned Initiatives</td>
+              <td><span class="badge badge-rio" data-en="Sonora River" data-es="Río Sonora">Sonora River</span></td>
+              <td data-en="Aconchi" data-es="Aconchi">Aconchi</td>
+              <td data-en="Planned Initiatives" data-es="Iniciativas Planificadas">Planned Initiatives</td>
             </tr>
             <tr>
               <td>8</td>
-              <td><span class="badge badge-rio">Sonora River</span></td>
-              <td>San Felipe de Jesús</td>
-              <td>Planned Initiatives</td>
+              <td><span class="badge badge-rio" data-en="Sonora River" data-es="Río Sonora">Sonora River</span></td>
+              <td data-en="San Felipe de Jesús" data-es="San Felipe de Jesús">San Felipe de Jesús</td>
+              <td data-en="Planned Initiatives" data-es="Iniciativas Planificadas">Planned Initiatives</td>
             </tr>
             <tr>
               <td>9</td>
-              <td><span class="badge badge-rio">Sonora River</span></td>
-              <td>Huépac</td>
-              <td>Planned Initiatives</td>
+              <td><span class="badge badge-rio" data-en="Sonora River" data-es="Río Sonora">Sonora River</span></td>
+              <td data-en="Huépac" data-es="Huépac">Huépac</td>
+              <td data-en="Planned Initiatives" data-es="Iniciativas Planificadas">Planned Initiatives</td>
             </tr>
             <tr>
               <td>10</td>
-              <td><span class="badge badge-rio">Sonora River</span></td>
-              <td>Banámichi</td>
-              <td>Planned Initiatives</td>
+              <td><span class="badge badge-rio" data-en="Sonora River" data-es="Río Sonora">Sonora River</span></td>
+              <td data-en="Banámichi" data-es="Banámichi">Banámichi</td>
+              <td data-en="Planned Initiatives" data-es="Iniciativas Planificadas">Planned Initiatives</td>
             </tr>
             <tr>
               <td>11</td>
-              <td><span class="badge badge-rio">Sonora River</span></td>
-              <td>Arizpe</td>
-              <td>Solar Water Pumping, Future Plant</td>
+              <td><span class="badge badge-rio" data-en="Sonora River" data-es="Río Sonora">Sonora River</span></td>
+              <td data-en="Arizpe" data-es="Arizpe">Arizpe</td>
+              <td data-en="Solar Water Pumping, Future Plant" data-es="Bombeo Solar de Agua, Planta Futura">Solar Water Pumping, Future Plant</td>
             </tr>
             <tr>
               <td>12</td>
-              <td><span class="badge badge-rio">Sonora River</span></td>
-              <td>Bacoachi</td>
-              <td>Solar Water Pumping, Future Plant</td>
+              <td><span class="badge badge-rio" data-en="Sonora River" data-es="Río Sonora">Sonora River</span></td>
+              <td data-en="Bacoachi" data-es="Bacoachi">Bacoachi</td>
+              <td data-en="Solar Water Pumping, Future Plant" data-es="Bombeo Solar de Agua, Planta Futura">Solar Water Pumping, Future Plant</td>
             </tr>
             <tr>
               <td>13</td>
-              <td><span class="badge badge-rio">Sonora River</span></td>
-              <td>Cananea</td>
-              <td>Mining Pilot, Future Solar</td>
+              <td><span class="badge badge-rio" data-en="Sonora River" data-es="Río Sonora">Sonora River</span></td>
+              <td data-en="Cananea" data-es="Cananea">Cananea</td>
+              <td data-en="Mining Pilot, Future Solar" data-es="Piloto Minero, Solar Futuro">Mining Pilot, Future Solar</td>
             </tr>
             <tr>
               <td>14</td>
-              <td><span class="badge badge-guaymas">Guaymas - Chihuahua</span></td>
-              <td>Yécora</td>
-              <td>Proposed Development</td>
+              <td><span class="badge badge-guaymas" data-en="Guaymas - Chihuahua" data-es="Guaymas - Chihuahua">Guaymas - Chihuahua</span></td>
+              <td data-en="Yécora" data-es="Yécora">Yécora</td>
+              <td data-en="Proposed Development" data-es="Desarrollo Propuesto">Proposed Development</td>
             </tr>
             <tr>
               <td>15</td>
-              <td><span class="badge badge-guaymas">Guaymas - Chihuahua</span></td>
-              <td>Ónavas</td>
-              <td>Off-grid Solar, Microgrid Plan</td>
+              <td><span class="badge badge-guaymas" data-en="Guaymas - Chihuahua" data-es="Guaymas - Chihuahua">Guaymas - Chihuahua</span></td>
+              <td data-en="Ónavas" data-es="Ónavas">Ónavas</td>
+              <td data-en="Off-grid Solar, Microgrid Plan" data-es="Solar Aislado, Plan de Microgrid">Off-grid Solar, Microgrid Plan</td>
             </tr>
             <tr>
               <td>16</td>
-              <td><span class="badge badge-guaymas">Guaymas - Chihuahua</span></td>
-              <td>La Colorada</td>
-              <td>Mining Pilot, Expansion Paused</td>
+              <td><span class="badge badge-guaymas" data-en="Guaymas - Chihuahua" data-es="Guaymas - Chihuahua">Guaymas - Chihuahua</span></td>
+              <td data-en="La Colorada" data-es="La Colorada">La Colorada</td>
+              <td data-en="Mining Pilot, Expansion Paused" data-es="Piloto Minero, Expansión Pausada">Mining Pilot, Expansion Paused</td>
             </tr>
             <tr>
               <td>17</td>
-              <td><span class="badge badge-guaymas">Guaymas - Chihuahua</span></td>
-              <td>Guaymas</td>
-              <td>Projects Proposed, Some Cancelled</td>
+              <td><span class="badge badge-guaymas" data-en="Guaymas - Chihuahua" data-es="Guaymas - Chihuahua">Guaymas - Chihuahua</span></td>
+              <td data-en="Guaymas" data-es="Guaymas">Guaymas</td>
+              <td data-en="Projects Proposed, Some Cancelled" data-es="Proyectos Propuestos, Algunos Cancelados">Projects Proposed, Some Cancelled</td>
             </tr>
           </tbody>
         </table>
@@ -1191,20 +1278,20 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-brand">
-        <h3>Sonoran Agrivoltaic Projects</h3>
-        <p>© 2025 Sonoran Agrivoltaic Projects. All rights reserved.</p>
+        <h3 data-en="Sonoran Agrivoltaic Projects" data-es="Proyectos Agrivoltaicos Sonorenses">Sonoran Agrivoltaic Projects</h3>
+        <p data-en="© 2025 Sonoran Agrivoltaic Projects. All rights reserved." data-es="© 2025 Proyectos Agrivoltaicos Sonorenses. Todos los derechos reservados.">© 2025 Sonoran Agrivoltaic Projects. All rights reserved.</p>
       </div>
       <div class="footer-links">
-        <h4 class="footer-title">Quick Links</h4>
+        <h4 class="footer-title" data-en="Quick Links" data-es="Enlaces Rápidos">Quick Links</h4>
         <ul class="footer-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Projects</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#" data-en="Home" data-es="Inicio">Home</a></li>
+          <li><a href="#" data-en="About" data-es="Acerca de">About</a></li>
+          <li><a href="#" data-en="Projects" data-es="Proyectos">Projects</a></li>
+          <li><a href="#" data-en="Contact" data-es="Contacto">Contact</a></li>
         </ul>
       </div>
       <div class="footer-social">
-        <h4 class="footer-title">Follow Us</h4>
+        <h4 class="footer-title" data-en="Follow Us" data-es="Síguenos">Follow Us</h4>
         <div class="social-links">
           <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
           <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
@@ -1212,13 +1299,13 @@
         </div>
       </div>
       <div class="footer-contact">
-        <h4 class="footer-title">Contact</h4>
-        <p>Email: gregbg@email.arizona.edu</p>
+        <h4 class="footer-title" data-en="Contact" data-es="Contacto">Contact</h4>
+        <p data-en="Email: gregbg@email.arizona.edu" data-es="Correo Electrónico: gregbg@email.arizona.edu">Email: gregbg@email.arizona.edu</p>
       </div>
     </div>
     <div class="footer-bottom">
       <img src="static/ua_logo.png" alt="University of Arizona Logo" class="footer-logo ua-logo">
-      <div class="footer-bottom-text">University of Arizona & UNAM</div>
+      <div class="footer-bottom-text" data-en="University of Arizona & UNAM" data-es="Universidad de Arizona & UNAM">University of Arizona & UNAM</div>
       <img src="static/unam_logo.png" alt="UNAM Logo" class="footer-logo unam-logo">
     </div>
   </footer>
@@ -1227,6 +1314,39 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+
+      // Language Toggle Functionality
+      const languageToggle = document.getElementById('languageToggle');
+      let currentLanguage = localStorage.getItem('language') || 'en'; // Default to English
+
+      function setLanguage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('language', lang);
+        if (lang === 'es') {
+          languageToggle.classList.add('toggle--on');
+          languageToggle.classList.remove('toggle--off');
+        } else {
+          languageToggle.classList.remove('toggle--on');
+          languageToggle.classList.add('toggle--off');
+        }
+        updateContent();
+      }
+
+      function updateContent() {
+        document.querySelectorAll('[data-en]').forEach(element => {
+          const englishText = element.getAttribute('data-en');
+          const spanishText = element.getAttribute('data-es');
+          element.textContent = currentLanguage === 'es' ? spanishText : englishText;
+        });
+      }
+
+      languageToggle.addEventListener('click', () => {
+        setLanguage(currentLanguage === 'en' ? 'es' : 'en');
+      });
+
+      // Set initial language on page load
+      setLanguage(currentLanguage);
+
 
       // Navbar scroll effect
       const navbar = document.querySelector('.navbar');
@@ -1332,18 +1452,18 @@
         div.style.borderRadius = '5px';
         div.style.boxShadow = '0 1px 5px rgba(0,0,0,0.4)';
         div.innerHTML = `
-          <div style="margin-bottom: 5px; font-weight: bold;">Zones:</div>
+          <div style="margin-bottom: 5px; font-weight: bold;" data-en="Zones:" data-es="Zonas:">Zones:</div>
           <div style="display: flex; align-items: center; margin-bottom: 5px;">
             <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png" style="width: 12px; height: 20px; margin-right: 5px;" alt="Green Marker">
-            <span>High Sierra</span>
+            <span data-en="High Sierra" data-es="Sierra Alta">High Sierra</span>
           </div>
           <div style="display: flex; align-items: center; margin-bottom: 5px;">
             <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png" style="width: 12px; height: 20px; margin-right: 5px;" alt="Blue Marker">
-            <span>Sonora River</span>
+            <span data-en="Sonora River" data-es="Río Sonora">Sonora River</span>
           </div>
           <div style="display: flex; align-items: center;">
             <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png" style="width: 12px; height: 20px; margin-right: 5px;" alt="Orange Marker">
-            <span>Guaymas - Chihuahua</span>
+            <span data-en="Guaymas - Chihuahua" data-es="Guaymas - Chihuahua">Guaymas - Chihuahua</span>
           </div>
         `;
         return div;
