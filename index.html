@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sonoran Agrivoltaic Projects</title>
+  <!-- Modern font combo: Inter for headings, Source Sans 3 for body text -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      /* Modern color palette with enhanced accessibility */
+      --primary-color: #A3001E; /* Deeper, more sophisticated red */
+      --primary-light: #D3243F; /* Lighter red for hover states */
+      --secondary-color: #ffffff;
+      --accent-color: #FFC72C; /* Warmer, more vibrant gold */
+      --text-color: #0A1B36; /* Slightly softened navy for better readability */
+      --light-text: #ffffff;
+      --gray-100: #f8f9fa;
+      --gray-200: #e9ecef;
+      --gray-300: #dee2e6;
+      --gray-600: #6c757d;
+      --gray-700: #495057;
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.07);
+      --border-radius-sm: 6px;
+      --border-radius-md: 8px;
+      --border-radius-lg: 12px;
+      --transition-standard: all 0.25s ease-in-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      line-height: 1.7;
+      color: var(--text-color);
+      background-color: var(--gray-100);
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--primary-color);
+      transition: var(--transition-standard);
+    }
+
+    a:hover {
+      color: var(--primary-light);
+    }
+
+    /* Modern split hero section */
+    .hero {
+      position: relative;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(163, 0, 30, 0.95), rgba(10, 27, 54, 0.9)), url("/api/placeholder/1920/1080");
+      background-size: cover;
+      background-position: center;
+      color: var(--light-text);
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      width: 90%;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      padding: 3rem 0;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2vw, 1.3rem);
+      font-weight: 300;
+      max-width: 650px;
+      margin: 0 auto 2rem;
+      animation: fadeInUp 1s ease-out 0.2s;
+      animation-fill-mode: both;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      background-color: var(--accent-color);
+      color: var(--text-color);
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--border-radius-sm);
+      font-weight: 600;
+      margin-top: 1rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition-standard);
+      animation: fadeInUp 1s ease-out 0.4s;
+      animation-fill-mode: both;
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      background-color: #FFD54F;
+    }
+
+    .hero-cta i {
+      margin-left: 0.5rem;
+    }
+
+    .hero-stats {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      padding: 1.5rem 0;
+    }
+
+    .stats-wrapper {
+      max-width: 1200px;
+      width: 90%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .section {
+      padding: 5rem 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      color: var(--primary-color);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -0.5rem;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: var(--accent-color);
+    }
+
+    .section-subtitle {
+      color: var(--gray-600);
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+    }
+
+    /* Map styling */
+    .map-section {
+      padding: 0;
+      position: relative;
+    }
+
+    .map-container {
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      margin-top: 5rem; /* Increased top margin for more space */
+      margin-bottom: 5rem;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      z-index: 10;
+      background-color: var(--secondary-color);
+    }
+
+    #map {
+      height: 600px;
+      width: 100%;
+    }
+
+    /* Projects grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .project-card {
+      background-color: var(--secondary-color);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition-standard);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .project-image-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-image {
+      height: 220px;
+      width: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .project-card:hover .project-image {
+      transform: scale(1.05);
+    }
+
+    .project-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background-color: var(--accent-color);
+      color: var(--text-color);
+    }
+
+    .project-details {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+
+    .project-location {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .project-location i {
+      margin-right: 0.5rem;
+      color: var(--primary-color);
+    }
+
+    .project-description {
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+
+    .project-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius-sm);
+      font-weight: 600;
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      transition: var(--transition-standard);
+      width: fit-content;
+    }
+
+    .project-cta:hover {
+      background-color: var(--primary-light);
+      color: var(--light-text);
+    }
+
+    .project-cta i {
+      margin-left: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    /* Featured area styling */
+    .featured-section {
+      background-color: var(--secondary-color);
+      position: relative;
+      padding: 3rem 1rem;
+      margin: 3rem 0;
+    }
+
+    .featured-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 30%;
+      height: 100%;
+      background-color: var(--primary-color);
+      opacity: 0.05;
+      clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
+    }
+
+    .featured-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .featured-image {
+      height: 500px;
+      width: 100%;
+      object-fit: cover;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .featured-text {
+      padding: 2rem 0;
+    }
+
+    .featured-title {
+      font-size: 2rem;
+      color: var(--text-color);
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-left: 1rem;
+    }
+
+    .featured-title::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      bottom: 0.5rem;
+      width: 4px;
+      background-color: var(--primary-color);
+      border-radius: 2px;
+    }
+
+    .featured-text ul {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+
+    .featured-text li {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .featured-text li::before {
+      content: '\f054';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      left: 0;
+      color: var(--primary-color);
+      font-size: 0.8rem;
+    }
+
+    .highlight {
+      background-color: rgba(255, 199, 44, 0.2);
+      font-weight: 600;
+      padding: 0 0.3rem;
+    }
+
+    /* Municipalities table styling */
+    .municipalities-section {
+      background-color: var(--gray-100);
+      padding: 2rem 0;
+    }
+
+    .table-container {
+      background-color: var(--secondary-color);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .project-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .project-table th, .project-table td {
+      padding: 1.25rem 1.5rem;
+      text-align: left;
+    }
+
+    .project-table th {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+    }
+
+    .project-table th:first-child {
+      border-top-left-radius: var(--border-radius-sm);
+    }
+
+    .project-table th:last-child {
+      border-top-right-radius: var(--border-radius-sm);
+    }
+
+    .project-table tr {
+      transition: var(--transition-standard);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .project-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .project-table tr:hover {
+      background-color: var(--gray-100);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.4rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-sierra {
+      background-color: rgba(40, 167, 69, 0.15);
+      color: #1e7e34;
+    }
+
+    .badge-rio {
+      background-color: rgba(0, 123, 255, 0.15);
+      color: #0062cc;
+    }
+
+    .badge-guaymas {
+      background-color: rgba(253, 126, 20, 0.15);
+      color: #d84e00;
+    }
+
+    /* Footer styling */
+    .footer {
+      background-color: var(--text-color);
+      color: var(--light-text);
+      padding: 5rem 0 0;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      max-width: 1200px;
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    .footer-brand h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-brand p {
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
+      line-height: 1.7;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--light-text);
+      transition: var(--transition-standard);
+    }
+
+    .social-link:hover {
+      background-color: var(--primary-light);
+      color: var(--light-text);
+      transform: translateY(-3px);
+    }
+
+    .footer-title {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: var(--light-text);
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+
+    .footer-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 30px;
+      height: 2px;
+      background-color: var(--primary-light);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      transition: var(--transition-standard);
+    }
+
+    .footer-links a:hover {
+      color: var(--light-text);
+      padding-left: 5px;
+    }
+
+    .footer-bottom {
+      margin-top: 3rem;
+      padding: 1.5rem 0;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    /* Utility classes */
+    .text-primary {
+      color: var(--primary-color);
+    }
+
+    .bg-primary {
+      background-color: var(--primary-color);
+    }
+
+    .bg-light {
+      background-color: var(--gray-100);
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1.25rem 0;
+      transition: var(--transition-standard);
+    }
+
+    .navbar.scrolled {
+      background-color: var(--secondary-color);
+      padding: 0.75rem 0;
+      box-shadow: var(--shadow-md);
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar-brand {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--light-text);
+      transition: var(--transition-standard);
+    }
+
+    .navbar.scrolled .navbar-brand {
+      color: var(--text-color);
+    }
+
+    .navbar-menu {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .navbar-link {
+      color: var(--light-text);
+      font-weight: 500;
+      transition: var(--transition-standard);
+    }
+
+    .navbar.scrolled .navbar-link {
+      color: var(--text-color);
+    }
+
+    .navbar-link:hover {
+      color: var(--accent-color);
+    }
+
+    .navbar-cta {
+      background-color: var(--accent-color);
+      color: var(--text-color);
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius-sm);
+      font-weight: 600;
+      transition: var(--transition-standard);
+    }
+
+    .navbar-cta:hover {
+      background-color: #FFD54F;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--light-text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition-standard);
+    }
+
+    .navbar.scrolled .mobile-toggle {
+      color: var(--text-color);
+    }
+
+    /* Mobile responsive styles */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .featured-content {
+        grid-template-columns: 1fr;
+      }
+
+      .featured-image {
+        height: 400px;
+        order: -1;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background-color: var(--secondary-color);
+        flex-direction: column;
+        padding: 5rem 2rem;
+        gap: 1.5rem;
+        box-shadow: var(--shadow-lg);
+        transition: right 0.3s ease-in-out;
+        align-items: flex-start;
+      }
+
+      .navbar-menu.active {
+        right: 0;
+      }
+
+      .navbar-link {
+        color: var(--text-color);
+        width: 100%;
+        display: block;
+      }
+
+      .mobile-toggle {
+        display: block;
+        z-index: 1001;
+      }
+
+      .mobile-toggle.active {
+        color: var(--text-color);
+      }
+
+      .hero-stats {
+        position: static;
+        padding: 2rem 0;
+      }
+
+      .stats-wrapper {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-content {
+        padding: 5rem 0 2rem;
+      }
+
+      #map {
+        height: 400px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 3rem 0 0;
+      }
+
+      .project-table {
+        font-size: 0.9rem;
+      }
+
+      .project-table th, .project-table td {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+
+      .scrollable-table {
+        overflow-x: auto;
+      }
+    }
+
+    /* Scroll animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Sonoran Agrivoltaic Projects</h1>
+      <p class="hero-subtitle">Integrating solar energy and sustainable agriculture for a bright future in Sonora, Mexico</p>
+      <a href="#projects-section" class="hero-cta">Explore Projects <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="hero-stats">
+      <div class="stats-wrapper">
+        <div class="hero-stat">
+          <div class="hero-stat-number">15</div>
+          <div class="hero-stat-label">Projects in Development</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">3</div>
+          <div class="hero-stat-label">Main Zones</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">17</div>
+          <div class="hero-stat-label">Municipalities Benefited</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">500+</div>
+          <div class="hero-stat-label">Hectares Utilized</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Map Section -->
+    <h2 class="section-title"></h2>
+    <div class="map-section">
+      <div class="map-container">
+        <div id="map"></div>
+      </div>
+    </div>
+
+    <!-- Featured Projects -->
+    <h2 class="section-title" id="projects-section">Solar Installations in Sonora</h2>
+    <p class="section-subtitle">Highlighting key solar energy projects recently completed in Sonora's High Sierra region.</p>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-image-container">
+          <img src="static/Bacadehuachi.jpg" alt="Solar Project in Bacadehuachi" class="project-image">
+        </div>
+        <div class="project-details">
+          <h3 class="project-title">Bacadéhuachi Solar Plant</h3>
+          <p class="project-location"><i class="fas fa-map-marker-alt"></i>Bacadéhuachi, Sonora</p>
+          <p class="project-description">Solar plant in Bacadéhuachi, Sonora, powering homes in a lithium-rich municipality. This 500 kW plant ensures residents can reliably use air conditioning and other appliances.</p>
+          <a href="https://forbes.com.mx/bacadehuachi-el-pueblo-inundado-de-litio-sera-encendido-con-energia-solar/" class="project-cta" target="_blank">View Details <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-image-container">
+          <img src="static/baserac.jpg" alt="Solar Project in Bacerac" class="project-image">
+        </div>
+        <div class="project-details">
+          <h3 class="project-title">Bacerac Solar Plant</h3>
+          <p class="project-location"><i class="fas fa-map-marker-alt"></i>Bacerac, Sonora</p>
+          <p class="project-description">Located in Bacerac, this 500 kW solar installation provides clean energy to the community, contributing to sustainable energy solutions in the High Sierra.</p>
+          <a href="https://forbes.com.mx/bacadehuachi-el-pueblo-inundado-de-litio-sera-encendido-con-energia-solar/" class="project-cta" target="_blank">View Details <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-image-container">
+          <img src="static/bavispe.jpg" alt="Solar Project in Bavispe" class="project-image">
+        </div>
+        <div class="project-details">
+          <h3 class="project-title">Bavispe Solar Plant</h3>
+          <p class="project-location"><i class="fas fa-map-marker-alt"></i>Bavispe, Sonora</p>
+          <p class="project-description">The Bavispe solar project, with a 500 kW capacity, significantly reduces CO2 emissions and provides accessible clean energy for the community.</p>
+          <a href="https://emmi.mx/proyectos-destacados/sfv-bavispe-420kw" class="project-cta" target="_blank">View Details <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Section -->
+  <section class="featured-section">
+    <div class="container">
+      <div class="featured-content">
+        <img src="static/Huachinera.jpeg" alt="Huachinera Solar Plant" class="featured-image">
+        <div class="featured-text">
+          <h2 class="featured-title">Huachinera Solar Project</h2>
+          <p>The Huachinera solar plant, boasting a capacity of 499 kW, stands as a flagship project within Sonora's renewable energy initiative. As part of the Ejido Solar program, this plant is pioneering a community-centric approach to solar energy development.</p>
+          <ul>
+            <li><strong>Community-Owned Energy:</strong> Built on land provided by the Ejido Assembly, ensuring community ownership and governance.</li>
+            <li><strong>UK PACT Collaboration:</strong> Supported through the UK PACT program, highlighting international cooperation in climate action.</li>
+            <li><strong>First of 40 Plants:</strong>  Leads the way for 40 planned distributed solar systems across Sonora, aiming to benefit 122,000 people.</li>
+            <li><strong>Economic and Environmental Impact:</strong> Reduces electricity costs for residents and municipal services, while significantly decreasing greenhouse gas emissions.</li>
+          </ul>
+          <p>This project exemplifies a new paradigm for solar development in Mexico, focusing on community participation and fair distribution of benefits.</p>
+          <a href="https://www.pv-magazine-mexico.com/2023/08/08/ejido-solar-y-su-nueva-planta-de-generacion-distribuida-de-499-kw-en-huachinera-sonora/" class="project-cta" target="_blank">Learn More <i class="fas fa-arrow-right"></i></a>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Municipalities Table -->
+  <section class="municipalities-section">
+    <div class="container">
+      <h2 class="section-title">Municipalities with Solar Installations</h2>
+      <p class="section-subtitle">List of municipalities in Sonora that now feature operational or planned solar photovoltaic plants.</p>
+      <div class="table-container">
+        <table class="project-table">
+          <thead>
+            <tr>
+              <th>Number</th>
+              <th>Zone</th>
+              <th>Municipality</th>
+              <th>Development Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><span class="badge badge-sierra">High Sierra</span></td>
+              <td>Bacadéhuachi</td>
+              <td>Operational</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><span class="badge badge-sierra">High Sierra</span></td>
+              <td>Huachinera</td>
+              <td>Operational</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><span class="badge badge-sierra">High Sierra</span></td>
+              <td>Bácerac</td>
+              <td>Operational</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><span class="badge badge-sierra">High Sierra</span></td>
+              <td>Bavispe</td>
+              <td>Operational</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><span class="badge badge-rio">Sonora River</span></td>
+              <td>Ures</td>
+              <td>Future Projects</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><span class="badge badge-rio">Sonora River</span></td>
+              <td>Baviacora</td>
+              <td>Planned Initiatives</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><span class="badge badge-rio">Sonora River</span></td>
+              <td>Aconchi</td>
+              <td>Planned Initiatives</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td><span class="badge badge-rio">Sonora River</span></td>
+              <td>San Felipe de Jesús</td>
+              <td>Planned Initiatives</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td><span class="badge badge-rio">Sonora River</span></td>
+              <td>Huépac</td>
+              <td>Planned Initiatives</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td><span class="badge badge-rio">Sonora River</span></td>
+              <td>Banámichi</td>
+              <td>Planned Initiatives</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td><span class="badge badge-rio">Sonora River</span></td>
+              <td>Arizpe</td>
+              <td>Solar Water Pumping, Future Plant</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td><span class="badge badge-rio">Sonora River</span></td>
+              <td>Bacoachi</td>
+              <td>Solar Water Pumping, Future Plant</td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td><span class="badge badge-rio">Sonora River</span></td>
+              <td>Cananea</td>
+              <td>Mining Pilot, Future Solar</td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td><span class="badge badge-guaymas">Guaymas - Chihuahua</span></td>
+              <td>Yécora</td>
+              <td>Proposed Development</td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td><span class="badge badge-guaymas">Guaymas - Chihuahua</span></td>
+              <td>Ónavas</td>
+              <td>Off-grid Solar, Microgrid Plan</td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td><span class="badge badge-guaymas">Guaymas - Chihuahua</span></td>
+              <td>La Colorada</td>
+              <td>Mining Pilot, Expansion Paused</td>
+            </tr>
+            <tr>
+              <td>17</td>
+              <td><span class="badge badge-guaymas">Guaymas - Chihuahua</span></td>
+              <td>Guaymas</td>
+              <td>Projects Proposed, Some Cancelled</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>Sonoran Agrivoltaic Projects</h3>
+        <p>© 2025 Sonoran Agrivoltaic Projects. All rights reserved.</p>
+      </div>
+      <div class="footer-links">
+        <h4 class="footer-title">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Projects</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-social">
+        <h4 class="footer-title">Follow Us</h4>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="footer-contact">
+        <h4 class="footer-title">Contact</h4>
+        <p>Email: gregbg@email.arizona.edu</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>University of Arizona & UNAM</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize the map centered on Sonora, Mexico
+      var map = L.map('map').setView([29.2972, -110.3309], 7);
+
+      // Add Esri Satellite tiles (keeping it as requested)
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Esri'
+      }).addTo(map);
+
+      // Define custom icons for each zone using colored markers (keep this part)
+      var greenIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+      var blueIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+        shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+      var orangeIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+        shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+
+      // Project locations with coordinates and corresponding zone names (keep this part)
+      const projectLocations = [
+        { name: "Bacadéhuachi", coords: [29.819227247419676, -109.1411635792877], zone: "High Sierra" },
+        { name: "Huachinera", coords: [30.212995586087544, -108.95328558230233], zone: "High Sierra" },
+        { name: "Bácerac", coords: [30.36187037227836, -108.93313711384396], zone: "High Sierra" },
+        { name: "Bavispe", coords: [30.47702126105386, -108.95004215179428], zone: "High Sierra" },
+        { name: "Ures", coords: [29.4247, -110.3953], zone: "Sonora River" },
+        { name: "Baviacora", coords: [29.7178, -110.1656], zone: "Sonora River" },
+        { name: "Aconchi", coords: [29.8242, -110.2272], zone: "Sonora River" },
+        { name: "San Felipe de Jesús", coords: [29.8742, -110.2370], zone: "Sonora River" },
+        { name: "Huépac", coords: [29.9119, -110.2181], zone: "Sonora River" },
+        { name: "Banámichi", coords: [30.0078, -110.2228], zone: "Sonora River" },
+        { name: "Arizpe", coords: [30.3361, -110.1656], zone: "Sonora River" },
+        { name: "Bacoachi", coords: [30.6406, -109.9656], zone: "Sonora River" },
+        { name: "Cananea", coords: [30.9853, -110.3017], zone: "Sonora River" },
+        { name: "Yécora", coords: [28.3667, -108.9500], zone: "Guaymas - Chihuahua" },
+        { name: "Ónavas", coords: [28.4690, -109.5325], zone: "Guaymas - Chihuahua" },
+        { name: "La Colorada", coords: [28.7894, -110.5972], zone: "Guaymas - Chihuahua" },
+        { name: "Guaymas", coords: [27.9183, -110.8989], zone: "Guaymas - Chihuahua" }
+      ];
+
+      // Add markers with custom icons based on each project's zone (keep this part)
+      projectLocations.forEach(function(location) {
+        var icon;
+        if (location.zone === "High Sierra") {
+          icon = greenIcon;
+        } else if (location.zone === "Sonora River") {
+          icon = blueIcon;
+        } else if (location.zone === "Guaymas - Chihuahua") {
+          icon = orangeIcon;
+        } else {
+          icon = blueIcon; // Fallback
+        }
+        L.marker(location.coords, { icon: icon })
+          .addTo(map)
+          .bindPopup(`<strong>${location.name}</strong><br>Zone: ${location.zone}`);
+      });
+
+      // Add a legend for the markers (keep this part)
+      const legend = L.control({ position: 'bottomright' });
+      legend.onAdd = function(map) {
+        const div = L.DomUtil.create('div', 'info legend');
+        div.style.backgroundColor = 'white';
+        div.style.padding = '10px';
+        div.style.borderRadius = '5px';
+        div.style.boxShadow = '0 1px 5px rgba(0,0,0,0.4)';
+        div.innerHTML = `
+          <div style="margin-bottom: 5px; font-weight: bold;">Zones:</div>
+          <div style="display: flex; align-items: center; margin-bottom: 5px;">
+            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png" style="width: 12px; height: 20px; margin-right: 5px;" alt="Green Marker">
+            <span>High Sierra</span>
+          </div>
+          <div style="display: flex; align-items: center; margin-bottom: 5px;">
+            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png" style="width: 12px; height: 20px; margin-right: 5px;" alt="Blue Marker">
+            <span>Sonora River</span>
+          </div>
+          <div style="display: flex; align-items: center;">
+            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png" style="width: 12px; height: 20px; margin-right: 5px;" alt="Orange Marker">
+            <span>Guaymas - Chihuahua</span>
+          </div>
+        `;
+        return div;
+      };
+      legend.addTo(map);
+
+      // **NEW: Add Sonora Municipality Boundaries with Names (FILTERED for Sonora)**
+      fetch('https://raw.githubusercontent.com/strotgen/mexico-leaflet/master/municipalities.geojson') // Using the provided URL (raw version)
+        .then(response => response.json())
+        .then(data => {
+          L.geoJSON(data, {
+            filter: function(feature) { // **NEW: Filter function**
+              return feature.properties.state_code === 26; // 26 is the state code for Sonora
+            },
+            style: function (feature) {
+              return {
+                'color': '#000000', // Gray color for municipality boundaries
+                'weight': 1,       // Thin boundary line
+                'fillOpacity': 0    // No fill, so satellite imagery is visible
+              };
+            },
+            onEachFeature: function (feature, layer) {
+              if (feature.properties && feature.properties.mun_name) { // Use mun_name as per your format
+                layer.bindTooltip(feature.properties.mun_name, { // Use mun_name as per your format
+                  permanent: false,
+                  direction: 'center',
+                  offset: [0, 0]
+                });
+              }
+            }
+          }).addTo(map);
+        })
+        .catch(error => {
+          console.error('Error loading municipality boundaries GeoJSON:', error);
+        });
+
+
+      // Fix for map display issues: invalidate size after the container is rendered. (keep this part)
+      setTimeout(function() {
+        map.invalidateSize();
+      }, 100);
+    });
+  </script>
+</body>
+</html>
