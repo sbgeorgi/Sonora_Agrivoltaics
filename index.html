@@ -605,6 +605,7 @@
       max-height: 50px; /* Maximum logo height */
       margin: 0 15px; /* Add some horizontal margin */
       opacity: 0.8; /* Slightly reduce logo opacity */
+      background-color: transparent; /* Make logo background transparent */
     }
 
     /* Mobile styles for footer logos and text */
@@ -654,6 +655,9 @@
     }
 
     .navbar-container {
+      max-width: 1200px;
+      width: 90%;
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -678,19 +682,57 @@
       align-items: center;
     }
 
+    .navbar-menu > li { /* Targets direct li children of navbar-menu for dropdown styling */
+      position: relative; /* To position dropdown content */
+    }
+
     .navbar-link {
       color: var(--light-text);
       font-weight: 500;
       transition: var(--transition-standard);
+      display: block; /* Make links block for dropdown trigger area */
+      padding: 0.5rem 0; /* Add some padding to links */
     }
 
     .navbar.scrolled .navbar-link {
       color: var(--text-color);
     }
 
-    .navbar-link:hover {
+    .navbar-link:hover,
+    .navbar-link.active {
       color: var(--accent-color);
     }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: var(--secondary-color);
+      min-width: 160px;
+      box-shadow: var(--shadow-md);
+      z-index: 1;
+      list-style: none;
+      padding: 0;
+      border-radius: var(--border-radius-sm);
+      top: 100%; /* Position dropdown below the link */
+      left: 0;
+    }
+
+    .dropdown-content a {
+      color: var(--text-color);
+      padding: 1rem 1.5rem;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: var(--gray-100);
+      color: var(--primary-color);
+    }
+
+    .navbar-menu > li:hover .dropdown-content { /* Show dropdown on li hover */
+      display: block;
+    }
+
 
     .navbar-cta {
       background-color: var(--accent-color);
@@ -750,40 +792,68 @@
     }
 
     @media (max-width: 768px) {
+      .navbar-container {
+        flex-direction: column; /* Stack brand and menu on mobile */
+        align-items: flex-start; /* Align items to the start on mobile */
+      }
+
+      .navbar-brand {
+        margin-bottom: 1rem; /* Add some space below brand on mobile */
+        color: var(--text-color); /* Ensure brand color is correct when scrolled or on mobile */
+      }
+
       .navbar-menu {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 80%;
-        max-width: 300px;
-        height: 100vh;
-        background-color: var(--secondary-color);
+        display: none; /* Initially hide menu on mobile */
         flex-direction: column;
-        padding: 5rem 2rem;
-        gap: 1.5rem;
-        box-shadow: var(--shadow-lg);
-        transition: right 0.3s ease-in-out;
-        align-items: flex-start;
+        width: 100%;
+        padding-top: 1rem; /* Add padding to the top of menu on mobile */
+        gap: 1rem;
       }
 
       .navbar-menu.active {
-        right: 0;
+        display: flex; /* Show menu when active class is applied */
       }
 
+
       .navbar-link {
-        color: var(--text-color);
-        width: 100%;
-        display: block;
+        color: var(--text-color); /* Ensure link color is correct on mobile */
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--border-radius-sm);
       }
+
+      .navbar.scrolled .navbar-link, .navbar-link {
+        color: var(--text-color);
+      }
+
+      .navbar-link:hover, .navbar-link.active,
+      .dropdown-content a:hover {
+        color: var(--primary-color);
+      }
+
+      .dropdown-content {
+        position: relative; /* Adjust dropdown position for mobile */
+        box-shadow: none;
+        width: 100%;
+      }
+
+      .dropdown-content a {
+        padding: 0.75rem 1.5rem;
+      }
+
 
       .mobile-toggle {
         display: block;
         z-index: 1001;
+        position: absolute; /* Position toggle button */
+        top: 1.25rem;
+        right: 1.5rem;
+        color: var(--light-text); /* Default color for toggle */
       }
 
-      .mobile-toggle.active {
-        color: var(--text-color);
+      .navbar.scrolled .mobile-toggle, .mobile-toggle.active {
+        color: var(--text-color); /* Toggle color when scrolled or active */
       }
+
 
       .hero-stats {
         position: static;
@@ -869,6 +939,29 @@
   </style>
 </head>
 <body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="#" class="navbar-brand">Sonoran Agrivoltaics</a>
+      <button type="button" class="mobile-toggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="navbar-menu">
+        <li><a href="https://sbgeorgi.github.io/ISA/index.html" class="navbar-link" target="_blank">International School of Agrivoltaics (ISA)</a></li>
+        <li>
+          <a href="#" class="navbar-link">Explore Sections</a>
+          <ul class="dropdown-content">
+            <li><a href="#map-section">Map</a></li>
+            <li><a href="#projects-section">Projects</a></li>
+            <li><a href="#municipalities-section">Project Status</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
@@ -901,7 +994,7 @@
   <!-- Main Content -->
   <div class="container">
     <!-- Map Section -->
-    <h2 class="section-title"></h2>
+    <h2 class="section-title" id="map-section"></h2>
     <div class="map-section">
       <div class="map-container">
         <div id="map"></div>
@@ -971,7 +1064,7 @@
   </section>
 
   <!-- Municipalities Table -->
-  <section class="municipalities-section">
+  <section class="municipalities-section" id="municipalities-section">
     <div class="container">
       <h2 class="section-title">Municipalities with Solar Installations</h2>
       <p class="section-subtitle">List of municipalities in Sonora that now feature operational or planned solar photovoltaic plants.</p>
@@ -1134,6 +1227,27 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+
+      // Navbar scroll effect
+      const navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      });
+
+      // Mobile menu toggle
+      const mobileToggle = document.querySelector('.mobile-toggle');
+      const navbarMenu = document.querySelector('.navbar-menu');
+
+      mobileToggle.addEventListener('click', () => {
+        navbarMenu.classList.toggle('active');
+        mobileToggle.classList.toggle('active');
+      });
+
+
       // Determine initial zoom level based on screen width
       var initialZoom = window.innerWidth < 768 ? 6 : 7; // Zoom out more on mobile
 
